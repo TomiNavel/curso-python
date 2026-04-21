@@ -33,9 +33,16 @@ export interface InterviewExercise {
   content: string;
 }
 
-export type Tab = 'teoria' | 'ejercicios' | 'entrevistas';
+export interface Cheatsheet {
+  id: string;
+  title: string;
+  content: string;
+}
+
+export type Tab = 'teoria' | 'ejercicios' | 'entrevistas' | 'material';
 
 export type PanelData =
   | { type: 'teoria'; content: string }
   | { type: 'ejercicios'; exercises: Exercise[] }
-  | { type: 'entrevistas'; questions: QA[]; errorsMd: string; interviewExercises: InterviewExercise[] };
+  | { type: 'entrevistas'; questions: QA[]; errorsMd: string; interviewExercises: InterviewExercise[] }
+  | { type: 'material'; cheatsheets: Cheatsheet[]; recursosMd: string };

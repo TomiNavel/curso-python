@@ -1,5 +1,5 @@
 import type { Topic, PanelData, Tab } from '../../types/course';
-import { findTopicResources } from '../../data/content';
+import { findTopicResources, getCheatsheets, getRecursosLoader } from '../../data/content';
 import { parseExercisePy, parseQA } from './parsers';
 
 // Each loader triggers a dynamic import() for a specific file chunk. The hook
@@ -45,8 +45,23 @@ async function loadEntrevistas(topic: Topic): Promise<PanelData> {
   };
 }
 
+async function loadMaterial(): Promise<PanelData> {
+  const entries = getCheatsheets();
+  const recursosLoader = getRecursosLoader();
+  const [cheatsheets, recursosMd] = await Promise.all([
+    Promise.all(entries.map(async e => ({
+      id: e.id,
+      title: e.title,
+      content: await e.load(),
+    }))),
+    recursosLoader ? recursosLoader() : Promise.resolve(''),
+  ]);
+  return { type: 'material', cheatsheets, recursosMd };
+}
+
 export async function loadTab(topic: Topic, tab: Tab): Promise<PanelData> {
   if (tab === 'teoria') return loadTeoria(topic);
   if (tab === 'ejercicios') return loadEjercicios(topic);
-  return loadEntrevistas(topic);
+  if (tab === 'entrevistas') return loadEntrevistas(topic);
+  return loadMaterial();
 }

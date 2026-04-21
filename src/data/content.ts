@@ -10,6 +10,10 @@
 //     Entrevistas/01-Preguntas.md          (optional)
 //     Entrevistas/02-Errores-Comunes.md    (optional)
 //     Entrevistas/Ejercicios/NN-Name.py    (optional, intermediate+ topics)
+//
+// Cross-topic material (not tied to a specific topic):
+//   src/Cheatsheets/*.md   — reference sheets spanning ranges of topics
+//   src/Recursos/*.md      — external links and resources
 
 type Loader = () => Promise<string>;
 
@@ -19,6 +23,8 @@ const EXERCISES = import.meta.glob('/src/Temario/*/Ejercicios/*.py', { query: '?
 const SOLUTIONS = import.meta.glob('/src/Temario/*/Ejercicios/Soluciones/*.py', { query: '?raw', import: 'default' }) as Record<string, Loader>;
 const INTERVIEW_MD = import.meta.glob('/src/Temario/*/Entrevistas/*.md', { query: '?raw', import: 'default' }) as Record<string, Loader>;
 const INTERVIEW_EX = import.meta.glob('/src/Temario/*/Entrevistas/Ejercicios/*.py', { query: '?raw', import: 'default' }) as Record<string, Loader>;
+const CHEATSHEETS = import.meta.glob('/src/Cheatsheets/*.md', { query: '?raw', import: 'default' }) as Record<string, Loader>;
+const RECURSOS = import.meta.glob('/src/Recursos/*.md', { query: '?raw', import: 'default' }) as Record<string, Loader>;
 
 export interface TopicResources {
   folderIndex: number;
@@ -28,6 +34,12 @@ export interface TopicResources {
   preguntas: Loader | null;
   errores: Loader | null;
   interviewExercises: Array<{ filename: string; load: Loader }>;
+}
+
+export interface CheatsheetEntry {
+  id: string;
+  title: string;
+  load: Loader;
 }
 
 function folderInfo(path: string): { folderName: string; folderIndex: number } | null {
@@ -116,7 +128,44 @@ function buildRegistry(): Map<number, TopicResources> {
   return map;
 }
 
+// Turns "01-fundamentos-temas-01-06.md" into "Fundamentos (temas 1-6)".
+function cheatsheetTitle(name: string): string {
+  const stem = name.replace(/\.md$/, '').replace(/^\d+-/, '');
+  const rangeMatch = stem.match(/^(.*)-temas-(\d+)-(\d+)$/);
+  if (rangeMatch) {
+    const base = rangeMatch[1].replace(/-/g, ' ');
+    const from = Number(rangeMatch[2]);
+    const to = Number(rangeMatch[3]);
+    return `${capitalize(base)} (temas ${from}-${to})`;
+  }
+  return capitalize(stem.replace(/-/g, ' '));
+}
+
+function capitalize(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function buildCheatsheets(): CheatsheetEntry[] {
+  const entries: CheatsheetEntry[] = Object.entries(CHEATSHEETS).map(([path, load]) => {
+    const name = filename(path);
+    return {
+      id: name.replace(/\.md$/, ''),
+      title: cheatsheetTitle(name),
+      load,
+    };
+  });
+  entries.sort((a, b) => a.id.localeCompare(b.id));
+  return entries;
+}
+
+function firstRecurso(): Loader | null {
+  const keys = Object.keys(RECURSOS).sort();
+  return keys.length > 0 ? RECURSOS[keys[0]] : null;
+}
+
 const REGISTRY = buildRegistry();
+const CHEATSHEET_LIST = buildCheatsheets();
+const RECURSOS_LOADER = firstRecurso();
 
 export function findTopicResources(id: number): TopicResources | undefined {
   return REGISTRY.get(id);
@@ -124,4 +173,12 @@ export function findTopicResources(id: number): TopicResources | undefined {
 
 export function hasLesson(id: number): boolean {
   return !!REGISTRY.get(id)?.lesson;
+}
+
+export function getCheatsheets(): CheatsheetEntry[] {
+  return CHEATSHEET_LIST;
+}
+
+export function getRecursosLoader(): Loader | null {
+  return RECURSOS_LOADER;
 }

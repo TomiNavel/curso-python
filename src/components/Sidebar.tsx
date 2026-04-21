@@ -42,7 +42,6 @@ export default function Sidebar({ selected, onSelect, onGoHome, collapsed, onTog
         {TOPICS.map(topic => {
           const open = isExpanded(topic.id);
           const isActive = selected?.topicId === topic.id && !selected?.subtopicId;
-          const hasContent = !!topic.folder;
 
           return (
             <div key={topic.id} className="mb-0.5">
@@ -56,11 +55,6 @@ export default function Sidebar({ selected, onSelect, onGoHome, collapsed, onTog
                   <>
                     <span className="text-muted2 text-[11px] shrink-0 font-mono">{topic.id}.</span>
                     <span className="flex-1 font-medium overflow-hidden text-ellipsis whitespace-nowrap">{topic.title}</span>
-                    {!hasContent && (
-                      <span className="text-[9px] font-bold uppercase tracking-wide text-yellow bg-yellow/12 border border-yellow/30 px-1.5 py-px rounded-full ml-0.5">
-                        pronto
-                      </span>
-                    )}
                     <span className="text-[10px] shrink-0">{open ? '▾' : '▸'}</span>
                   </>
                 )}

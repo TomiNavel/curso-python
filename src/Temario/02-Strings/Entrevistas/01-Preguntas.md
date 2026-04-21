@@ -19,8 +19,6 @@
 
 ---
 
-## Respuestas
-
 ### R1. ¿Qué significa que los strings en Python sean inmutables?
 
 Significa que una vez creado un string, no se puede modificar su contenido. Ningún método de string altera el objeto original — todos devuelven un nuevo string. Si se llama a `saludo.upper()` sin asignar el resultado, el string original no cambia y el nuevo se descarta.

@@ -6,6 +6,7 @@ import { extractSection } from '../lib/content/parsers';
 import MarkdownContent from './MarkdownContent';
 import ExercisesView from './ExercisesView';
 import InterviewView from './InterviewView';
+import MaterialView from './MaterialView';
 
 interface Props {
   selected: Selection;
@@ -16,6 +17,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'teoria', label: 'Teoría' },
   { id: 'ejercicios', label: 'Ejercicios' },
   { id: 'entrevistas', label: 'Entrevistas' },
+  { id: 'material', label: 'Material' },
 ];
 
 export default function ContentPanel({ selected, onSelect }: Props) {
@@ -26,7 +28,8 @@ export default function ContentPanel({ selected, onSelect }: Props) {
   const { status, data, error } = useTopicContent(topic, tab);
 
   const renderContent = () => {
-    if (!topic.folder) return <ComingSoon title={topic.title} />;
+    // Material is global and does not require a topic lesson.
+    if (!topic.folder && tab !== 'material') return <ComingSoon title={topic.title} />;
     if (status === 'loading') return (
       <div className="flex flex-col items-center justify-center gap-4 py-20 text-muted">
         <div className="w-9 h-9 border-3 border-border border-t-accent rounded-full animate-spin" />
@@ -40,8 +43,11 @@ export default function ContentPanel({ selected, onSelect }: Props) {
 
     if (data.type === 'teoria') return <TeoriaView selected={selected} content={data.content} onSelect={onSelect} />;
     if (data.type === 'ejercicios') return <ExercisesView exercises={data.exercises} />;
-    return <InterviewView questions={data.questions} errorsMd={data.errorsMd} interviewExercises={data.interviewExercises} />;
+    if (data.type === 'entrevistas') return <InterviewView questions={data.questions} errorsMd={data.errorsMd} interviewExercises={data.interviewExercises} />;
+    return <MaterialView cheatsheets={data.cheatsheets} recursosMd={data.recursosMd} />;
   };
+
+  const showTabs = !!topic.folder || tab === 'material';
 
   return (
     <div className="flex flex-col h-screen">
@@ -51,7 +57,7 @@ export default function ContentPanel({ selected, onSelect }: Props) {
           {subtopic && <><span className="text-muted2">›</span><span>{subtopic.title}</span></>}
         </div>
         <h1 className="text-[22px] font-bold text-text mb-4">{subtopic ? subtopic.title : topic.title}</h1>
-        {topic.folder && (
+        {showTabs && (
           <div className="flex gap-1">
             {TABS.map(t => (
               <button

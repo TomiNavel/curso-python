@@ -14,13 +14,16 @@ export function parseExercisePy(filename: string, content: string): Omit<Exercis
 }
 
 export function parseQA(md: string): QA[] {
-  const answersMatch = md.match(/## Respuestas([\s\S]*?)$/i);
-  if (!answersMatch) return [];
-  const blocks = answersMatch[1].split(/\n(?=### R\d+\.)/).filter(b => b.trim());
+  const blocks = md
+    .split(/\n(?=###\s*R\d+\.)/)
+    .filter(b => /^###\s*R\d+\./.test(b.trim()));
+
   return blocks.map(block => {
-    const titleMatch = block.match(/^### R\d+\.\s*(.+)/);
+    const titleMatch = block.match(/^###\s*R\d+\.\s*(.+)/);
     const title = titleMatch ? titleMatch[1].trim() : '';
-    const body = block.replace(/^### R\d+\.\s*.+\n/, '').trim();
+
+    const body = block.replace(/^###\s*R\d+\.\s*.+\n?/, '').trim();
+
     return { q: title, a: body };
   }).filter(x => x.q);
 }

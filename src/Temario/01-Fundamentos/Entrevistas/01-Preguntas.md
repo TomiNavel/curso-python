@@ -17,8 +17,6 @@
 
 ---
 
-## Respuestas
-
 ### R1. ¿Python es compilado o interpretado?
 
 Python es interpretado. El código fuente se ejecuta línea a línea a través del intérprete, sin un paso previo de compilación a código máquina como en C o Java. En la práctica, CPython (la implementación estándar) compila a bytecode (archivos `.pyc`) que luego ejecuta una máquina virtual, pero esto es transparente para el programador y no equivale a la compilación tradicional.

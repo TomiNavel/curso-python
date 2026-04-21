@@ -26,7 +26,8 @@ export function useTopicContent(topic: Topic | undefined, tab: Tab): Result {
       return;
     }
 
-    const key = `${topicId}:${tab}`;
+    // Material is global (not tied to a topic) — share cache across topics.
+    const key = tab === 'material' ? 'global:material' : `${topicId}:${tab}`;
     const cached = cache.current.get(key);
     if (cached) {
       setData(cached);

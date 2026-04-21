@@ -50,3 +50,5 @@ body {
 .markdown-body table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 13px; }
 .markdown-body th { background: var(--color-surface2); color: var(--color-text); font-weight: 600; padding: 8px 12px; border: 1px solid var(--color-border); text-align: left; }
 .markdown-body td { padding: 7px 12px; border: 1px solid var(--color-border); color: #c8c8e8; }
+.markdown-body a, .markdown-compact a { color: var(--color-blue); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--color-blue) 40%, transparent); text-underline-offset: 2px; transition: color 0.15s, text-decoration-color 0.15s; }
+.markdown-body a:hover, .markdown-compact a:hover { color: var(--color-blue); text-decoration-color: var(--color-blue); }
