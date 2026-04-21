@@ -8,9 +8,32 @@ interface Props {
 }
 
 export default function ExercisesView({ exercises }: Props) {
+  const [active, setActive] = useState(0);
+
+  if (exercises.length === 0) {
+    return <p className="text-[14px] text-muted py-8">No hay ejercicios para este tema.</p>;
+  }
+
+  const currentIdx = Math.min(active, exercises.length - 1);
+  const current = exercises[currentIdx];
+
   return (
-    <div className="flex flex-col gap-6 max-w-190">
-      {exercises.map((ex, i) => <ExerciseCard key={i} exercise={ex} index={i} />)}
+    <div className="flex flex-col gap-5 max-w-190">
+      <div className="sticky top-0 z-10 bg-surface -mx-12 px-12 py-3 flex gap-1.5 flex-wrap border-b border-border">
+        {exercises.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setActive(i)}
+            className={`w-9 h-9 rounded-lg text-[13px] font-mono border transition-colors cursor-pointer
+              ${i === currentIdx
+                ? 'bg-accent border-accent text-white'
+                : 'bg-transparent border-border text-muted hover:text-text'}`}
+          >
+            {i + 1}
+          </button>
+        ))}
+      </div>
+      <ExerciseCard exercise={current} index={currentIdx} />
     </div>
   );
 }

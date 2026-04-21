@@ -28,6 +28,24 @@ export function parseQA(md: string): QA[] {
   }).filter(x => x.q);
 }
 
+export function parseErrors(md: string): QA[] {
+  if (!md) return [];
+  const body = md.replace(/^#\s.+\n?/, '');
+  const blocks = body
+    .split(/\n(?=##\s+Error\s+\d+)/i)
+    .filter(b => /^##\s+Error\s+\d+/i.test(b.trim()));
+
+  return blocks.map(block => {
+    const titleMatch = block.match(/^##\s+Error\s+\d+\s*[:.-]?\s*(.+)/i);
+    const title = titleMatch ? titleMatch[1].trim() : '';
+    const content = block
+      .replace(/^##\s+Error\s+\d+.*\n?/i, '')
+      .replace(/\n---\s*$/, '')
+      .trim();
+    return { q: title, a: content };
+  }).filter(x => x.q);
+}
+
 // Splits markdown into code-fence and non-code segments so section/heading
 // regexes only run over prose, never over code.
 interface Segment { kind: 'code' | 'prose'; text: string }

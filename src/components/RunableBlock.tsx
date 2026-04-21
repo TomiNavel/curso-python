@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { runPython } from '../lib/pyodide';
 
 interface Props {
@@ -11,6 +11,11 @@ export default function RunableBlock({ initialCode, lang, label }: Props) {
   const [code, setCode] = useState(initialCode);
   const [output, setOutput] = useState<{ output: string; error: string | null } | null>(null);
   const [running, setRunning] = useState(false);
+
+  useEffect(() => {
+    setCode(initialCode);
+    setOutput(null);
+  }, [initialCode]);
   const isPython = !lang || lang === 'python';
   const rows = Math.max(3, code.split('\n').length + 1);
 

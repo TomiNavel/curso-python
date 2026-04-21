@@ -12,7 +12,7 @@ interface Props {
 
 export default function SubTabs({ tabs, active, onChange }: Props) {
   return (
-    <div className="flex gap-6 border-b border-border -mt-2">
+    <div className="sticky top-0 z-10 flex gap-4 border-b border-border bg-surface -mx-12 px-12">
       {tabs.map(t => {
         const isActive = t.id === active;
         return (
@@ -20,7 +20,7 @@ export default function SubTabs({ tabs, active, onChange }: Props) {
             key={t.id}
             disabled={t.disabled}
             onClick={() => onChange(t.id)}
-            className={`relative bg-transparent border-none cursor-pointer px-0 py-2.5 text-[13px] font-medium transition-colors
+            className={`relative bg-transparent border-none cursor-pointer px-0 py-2 text-[13px] font-medium transition-colors
               ${t.disabled
                 ? 'text-muted2 cursor-not-allowed'
                 : isActive

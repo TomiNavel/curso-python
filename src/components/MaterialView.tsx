@@ -30,12 +30,16 @@ export default function MaterialView({ cheatsheets, recursosMd }: Props) {
       <SubTabs tabs={tabs} active={active} onChange={setActive} />
       {currentCheatsheet && (
         currentCheatsheet.content.trim()
-          ? <MarkdownContent content={currentCheatsheet.content} />
+          ? <MarkdownContent content={stripLeadingH1(currentCheatsheet.content)} />
           : <InDevelopment />
       )}
-      {showRecursos && <MarkdownContent content={recursosMd} />}
+      {showRecursos && <MarkdownContent content={stripLeadingH1(recursosMd)} />}
     </div>
   );
+}
+
+function stripLeadingH1(md: string): string {
+  return md.replace(/^\s*#\s.+\n?/, '');
 }
 
 function InDevelopment() {
