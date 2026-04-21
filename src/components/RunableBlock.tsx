@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import CodeMirror from '@uiw/react-codemirror';
+import { python } from '@codemirror/lang-python';
+import { oneDark } from '@codemirror/theme-one-dark';
+import { EditorView } from '@codemirror/view';
 import { runPython } from '../lib/pyodide';
 
 interface Props {
@@ -28,7 +32,6 @@ export default function RunableBlock({ initialCode, lang, label, storageKey }: P
   }
 
   const isPython = !lang || lang === 'python';
-  const rows = Math.max(3, code.split('\n').length + 1);
 
   const handleChange = (value: string) => {
     setCode(value);
@@ -62,12 +65,19 @@ export default function RunableBlock({ initialCode, lang, label, storageKey }: P
           </button>
         )}
       </div>
-      <textarea
-        className="w-full px-4 py-3.5 bg-bg2 text-[#c8e6ff] font-mono text-[13px] leading-relaxed border-none outline-none resize-y tab-size-4 focus:bg-bg2/90"
+      <CodeMirror
         value={code}
-        onChange={e => handleChange(e.target.value)}
-        spellCheck={false}
-        rows={rows}
+        onChange={handleChange}
+        theme={oneDark}
+        extensions={[python(), EditorView.lineWrapping]}
+        basicSetup={{
+          lineNumbers: true,
+          foldGutter: false,
+          highlightActiveLine: true,
+          highlightActiveLineGutter: true,
+          autocompletion: false,
+        }}
+        className="text-[13px]"
       />
       {output && (
         <div className={`px-4 py-3 border-t border-border font-mono text-[12px] ${output.error ? 'bg-red/8' : 'bg-green/8'}`}>
