@@ -173,6 +173,30 @@ Además, los atributos que participan en el hash deben ser efectivamente inmutab
 
 ### R12. ¿Cuál es el resultado del código?
 
+```python
+class Caja:
+    def __init__(self, *items):
+        self.items = list(items)
+
+    def __len__(self):
+        return len(self.items)
+
+    def __getitem__(self, indice):
+        return self.items[indice]
+
+    def __contains__(self, item):
+        return item.upper() in [i.upper() for i in self.items]
+
+c = Caja("Manzana", "Pera", "UVA")
+print(len(c))
+print(c[1])
+print("uva" in c)
+print("naranja" in c)
+print(list(c))
+```
+
+Salida:
+
 ```
 3
 Pera

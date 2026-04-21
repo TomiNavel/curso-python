@@ -130,6 +130,37 @@ Para la mayoría de los casos, `_atributo` (un guion bajo) es suficiente. Usar `
 
 ### R12. ¿Cuál es el resultado del código?
 
+```python
+class Producto:
+    def __init__(self, nombre, precio):
+        self.nombre = nombre
+        self.precio = precio
+
+    @property
+    def precio(self):
+        return self._precio
+
+    @precio.setter
+    def precio(self, valor):
+        if valor < 0:
+            self._precio = 0
+        else:
+            self._precio = valor
+
+    @property
+    def con_iva(self):
+        return round(self._precio * 1.21, 2)
+
+p = Producto("Laptop", -50)
+print(p.precio)
+print(p.con_iva)
+p.precio = 100
+print(p.precio)
+print(p.con_iva)
+```
+
+Salida:
+
 ```
 0
 0.0

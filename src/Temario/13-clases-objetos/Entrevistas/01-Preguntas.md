@@ -165,6 +165,22 @@ En lenguajes como Java o C++, los tipos primitivos (`int`, `boolean`) no son obj
 
 ### R12. ¿Cuál es el resultado del código?
 
+```python
+class Contador:
+    cuenta = 0
+
+    def __init__(self):
+        self.cuenta = Contador.cuenta
+        Contador.cuenta += 1
+
+a = Contador()
+b = Contador()
+c = Contador()
+print(a.cuenta, b.cuenta, c.cuenta, Contador.cuenta)
+```
+
+Salida:
+
 ```
 0 1 2 3
 ```

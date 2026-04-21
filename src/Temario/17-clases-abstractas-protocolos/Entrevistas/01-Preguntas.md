@@ -140,6 +140,40 @@ En Python, las clases abstractas son el mecanismo natural para implementarlo: lo
 
 ### R12. ¿Cuál es el resultado del código?
 
+```python
+from abc import ABC, abstractmethod
+
+class Animal(ABC):
+    def __init__(self, nombre):
+        self.nombre = nombre
+
+    @abstractmethod
+    def sonido(self):
+        pass
+
+    def presentarse(self):
+        return f"{self.nombre} dice {self.sonido()}"
+
+class Perro(Animal):
+    def sonido(self):
+        return "guau"
+
+class Gato(Animal):
+    def sonido(self):
+        return "miau"
+
+animales = [Perro("Rex"), Gato("Luna")]
+for a in animales:
+    print(a.presentarse())
+
+try:
+    a = Animal("Genérico")
+except TypeError as e:
+    print("Error al instanciar Animal")
+```
+
+Salida:
+
 ```
 Rex dice guau
 Luna dice miau

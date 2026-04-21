@@ -1,23 +1,39 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { runPython } from '../lib/pyodide';
 
 interface Props {
   initialCode: string;
   lang: string;
   label?: string;
+  storageKey?: string;
 }
 
-export default function RunableBlock({ initialCode, lang, label }: Props) {
-  const [code, setCode] = useState(initialCode);
+const sessionCode = new Map<string, string>();
+
+function resolveInitial(initialCode: string, storageKey?: string): string {
+  if (storageKey && sessionCode.has(storageKey)) return sessionCode.get(storageKey)!;
+  return initialCode;
+}
+
+export default function RunableBlock({ initialCode, lang, label, storageKey }: Props) {
+  const [code, setCode] = useState(() => resolveInitial(initialCode, storageKey));
   const [output, setOutput] = useState<{ output: string; error: string | null } | null>(null);
   const [running, setRunning] = useState(false);
+  const [prevKey, setPrevKey] = useState<{ key: string | undefined; initial: string }>({ key: storageKey, initial: initialCode });
 
-  useEffect(() => {
-    setCode(initialCode);
+  if (prevKey.key !== storageKey || prevKey.initial !== initialCode) {
+    setPrevKey({ key: storageKey, initial: initialCode });
+    setCode(resolveInitial(initialCode, storageKey));
     setOutput(null);
-  }, [initialCode]);
+  }
+
   const isPython = !lang || lang === 'python';
   const rows = Math.max(3, code.split('\n').length + 1);
+
+  const handleChange = (value: string) => {
+    setCode(value);
+    if (storageKey) sessionCode.set(storageKey, value);
+  };
 
   const handleRun = async () => {
     setRunning(true);
@@ -49,7 +65,7 @@ export default function RunableBlock({ initialCode, lang, label }: Props) {
       <textarea
         className="w-full px-4 py-3.5 bg-bg2 text-[#c8e6ff] font-mono text-[13px] leading-relaxed border-none outline-none resize-y tab-size-4 focus:bg-bg2/90"
         value={code}
-        onChange={e => setCode(e.target.value)}
+        onChange={e => handleChange(e.target.value)}
         spellCheck={false}
         rows={rows}
       />

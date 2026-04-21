@@ -4,10 +4,11 @@ import MarkdownContent from './MarkdownContent';
 import RunableBlock from './RunableBlock';
 
 interface Props {
+  topicId: number;
   exercises: Exercise[];
 }
 
-export default function ExercisesView({ exercises }: Props) {
+export default function ExercisesView({ topicId, exercises }: Props) {
   const [active, setActive] = useState(0);
 
   if (exercises.length === 0) {
@@ -33,13 +34,14 @@ export default function ExercisesView({ exercises }: Props) {
           </button>
         ))}
       </div>
-      <ExerciseCard exercise={current} index={currentIdx} />
+      <ExerciseCard topicId={topicId} exercise={current} index={currentIdx} />
     </div>
   );
 }
 
-function ExerciseCard({ exercise, index }: { exercise: Exercise; index: number }) {
+function ExerciseCard({ topicId, exercise, index }: { topicId: number; exercise: Exercise; index: number }) {
   const [showSol, setShowSol] = useState(false);
+  const storageKey = `ex:${topicId}:${exercise.title}`;
 
   return (
     <div className="bg-surface2 border border-border rounded-xl p-6">
@@ -54,7 +56,7 @@ function ExerciseCard({ exercise, index }: { exercise: Exercise; index: number }
           <MarkdownContent content={exercise.desc} compact />
         </div>
       )}
-      <RunableBlock initialCode={exercise.starter} lang="python" label="Tu código" />
+      <RunableBlock initialCode={exercise.starter} lang="python" label="Tu código" storageKey={storageKey} />
       {exercise.solution && (
         <>
           <div className="mt-3">

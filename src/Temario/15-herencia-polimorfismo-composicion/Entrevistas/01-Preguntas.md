@@ -140,6 +140,28 @@ Lo mismo aplica a `issubclass(Hija, Padre)` — devuelve `True` si `Hija` hereda
 
 ### R12. ¿Cuál es el resultado del código?
 
+```python
+class A:
+    def saludar(self):
+        return "Hola desde A"
+
+class B(A):
+    pass
+
+class C(A):
+    def saludar(self):
+        return "Hola desde C"
+
+class D(B, C):
+    pass
+
+d = D()
+print(d.saludar())
+print(D.__mro__)
+```
+
+Salida:
+
 ```
 Hola desde C
 (<class 'D'>, <class 'B'>, <class 'C'>, <class 'A'>, <class 'object'>)

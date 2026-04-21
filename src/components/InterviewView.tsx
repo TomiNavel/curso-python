@@ -114,7 +114,7 @@ function Debug({ exercises, topicId }: { exercises: InterviewExercise[]; topicId
           </span>
           <h3 className="text-[16px] font-semibold text-text">{currentTitle}</h3>
         </div>
-        <RunableBlock initialCode={current.content} lang="python" label="Tu código" />
+        <RunableBlock initialCode={current.content} lang="python" label="Tu código" storageKey={`debug:${topicId}:${current.filename}`} />
       </div>
     </section>
   );

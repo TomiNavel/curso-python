@@ -47,7 +47,7 @@ export default function ContentPanel({ selected, onSelect }: Props) {
     if (!data) return null;
 
     if (data.type === 'teoria') return <TeoriaView selected={selected} content={data.content} onSelect={onSelect} />;
-    if (data.type === 'ejercicios') return <ExercisesView exercises={data.exercises} />;
+    if (data.type === 'ejercicios') return <ExercisesView topicId={topic.id} exercises={data.exercises} />;
     if (data.type === 'entrevistas') return <InterviewView topicId={topic.id} questions={data.questions} errorsMd={data.errorsMd} interviewExercises={data.interviewExercises} />;
     return <MaterialView cheatsheets={data.cheatsheets} recursosMd={data.recursosMd} />;
   };
