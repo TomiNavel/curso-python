@@ -8,6 +8,7 @@ import { parseHash, toHash } from './lib/hashRoute';
 export default function App() {
   const [selected, setSelected] = useState<Selection | null>(() => parseHash(window.location.hash));
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const onHash = () => setSelected(parseHash(window.location.hash));
@@ -32,8 +33,17 @@ export default function App() {
         onGoHome={() => updateSelected(null)}
         collapsed={collapsed}
         onToggle={() => setCollapsed(c => !c)}
+        mobileOpen={mobileOpen}
+        onMobileClose={() => setMobileOpen(false)}
       />
-      <main className="flex-1 overflow-hidden bg-surface">
+      <main className="flex-1 overflow-hidden bg-surface relative">
+        <button
+          onClick={() => setMobileOpen(true)}
+          className="md:hidden fixed top-3 left-3 z-30 bg-bg2 border border-border text-text rounded-md w-9 h-9 flex items-center justify-center cursor-pointer text-[18px] hover:border-accent hover:text-accent transition-all"
+          title="Menú"
+        >
+          ☰
+        </button>
         {selected
           ? <ContentPanel key={selected.topicId} selected={selected} onSelect={updateSelected} />
           : <Welcome onSelect={updateSelected} />
@@ -46,13 +56,13 @@ export default function App() {
 function Welcome({ onSelect }: { onSelect: (s: Selection) => void }) {
   const available = TOPICS.filter(t => !!t.folder);
   return (
-    <div className="w-full h-full flex items-center justify-center overflow-y-auto">
-      <div className="grid grid-cols-2 gap-12 w-full px-12 py-12 max-w-300">
+    <div className="w-full h-full flex items-start md:items-center justify-center overflow-y-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full px-4 md:px-12 pt-20 md:pt-12 pb-8 md:pb-12 max-w-300">
 
         {/* Left */}
         <div className="flex flex-col">
           <span className="text-[11px] font-semibold uppercase tracking-[2px] text-muted2 font-mono mb-3.5">Curso completo</span>
-          <h1 className="text-[52px] font-black text-text leading-none tracking-[-1.5px] mb-3.5">
+          <h1 className="text-[36px] md:text-[52px] font-black text-text leading-none tracking-[-1.5px] mb-3.5">
             Aprende<br /><span className="text-accent">Python</span>
           </h1>
           <p className="text-[15px] text-muted leading-relaxed mb-6 max-w-sm">
@@ -74,7 +84,7 @@ function Welcome({ onSelect }: { onSelect: (s: Selection) => void }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-4 gap-2.5">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
             {[
               { value: String(available.length), label: 'Temas' },
               { value: '100+', label: 'Ejercicios' },
@@ -92,7 +102,7 @@ function Welcome({ onSelect }: { onSelect: (s: Selection) => void }) {
         {/* Right */}
         <div className="flex flex-col justify-center">
           <span className="text-[11px] font-semibold uppercase tracking-[1.5px] text-muted2 mb-3.5">Empieza por aquí</span>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {available.slice(0, 6).map(t => (
               <button
                 key={t.id}

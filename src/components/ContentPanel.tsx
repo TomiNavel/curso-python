@@ -57,17 +57,17 @@ export default function ContentPanel({ selected, onSelect }: Props) {
   return (
     <div className="flex flex-col h-screen">
       <div className="shrink-0 border-b border-border bg-bg">
-        <div className="max-w-300 mx-auto px-12 pt-6">
-          <h1 className="flex items-center gap-2 text-[22px] font-bold text-text mb-4">
+        <div className="max-w-300 mx-auto pl-16 md:pl-12 pr-4 md:pr-12 pt-6">
+          <h1 className="flex flex-wrap items-center gap-2 text-[18px] md:text-[22px] font-bold text-text mb-4">
             <span>{topic.title}</span>
             {subtopic && <><span className="text-muted2 font-normal">›</span><span>{subtopic.title}</span></>}
           </h1>
           {showTabs && (
-            <div className="flex gap-1">
+            <div className="flex gap-1 overflow-x-auto scrollbar-thin scrollbar-thumb-border2 -mx-4 md:mx-0 px-4 md:px-0">
               {TABS.map(t => (
                 <button
                   key={t.id}
-                  className={`bg-transparent border border-transparent text-muted cursor-pointer px-5 py-2.5 text-[15px] font-medium rounded-t-lg transition-all hover:text-text hover:bg-surface
+                  className={`bg-transparent border border-transparent text-muted cursor-pointer px-3 md:px-5 py-2.5 text-[13px] md:text-[15px] font-medium rounded-t-lg transition-all whitespace-nowrap hover:text-text hover:bg-surface
                     ${tab === t.id ? 'text-text! bg-surface! border-border! border-b-transparent!' : ''}`}
                   onClick={() => setTab(t.id)}
                 >
@@ -79,7 +79,7 @@ export default function ContentPanel({ selected, onSelect }: Props) {
         </div>
       </div>
       <div ref={scrollRef} className="flex-1 overflow-y-auto bg-surface">
-        <div className="max-w-300 mx-auto px-12 pb-8">
+        <div className="max-w-300 mx-auto px-4 md:px-12 pb-8">
           {renderContent()}
         </div>
       </div>

@@ -93,7 +93,7 @@ function Debug({ exercises, topicId }: { exercises: InterviewExercise[]; topicId
 
   return (
     <section className="flex flex-col gap-5">
-      <div className="sticky top-0 z-10 bg-surface -mx-12 px-12 py-3 flex gap-1.5 flex-wrap border-b border-border">
+      <div className="sticky top-0 z-10 bg-surface -mx-4 md:-mx-12 px-4 md:px-12 py-3 flex gap-1.5 flex-wrap border-b border-border">
         {runnable.map((_, i) => (
           <button
             key={i}
@@ -107,7 +107,7 @@ function Debug({ exercises, topicId }: { exercises: InterviewExercise[]; topicId
           </button>
         ))}
       </div>
-      <div className="bg-surface2 border border-border rounded-xl p-6">
+      <div className="bg-surface2 border border-border rounded-xl p-4 md:p-6">
         <div className="flex items-center gap-3 mb-2.5">
           <span className="bg-accent text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap">
             Ejercicio {currentIdx + 1}

@@ -20,7 +20,7 @@ export default function ExercisesView({ topicId, exercises }: Props) {
 
   return (
     <div className="flex flex-col gap-5 max-w-190">
-      <div className="sticky top-0 z-10 bg-surface -mx-12 px-12 py-3 flex gap-1.5 flex-wrap border-b border-border">
+      <div className="sticky top-0 z-10 bg-surface -mx-4 md:-mx-12 px-4 md:px-12 py-3 flex gap-1.5 flex-wrap border-b border-border">
         {exercises.map((_, i) => (
           <button
             key={i}
@@ -44,7 +44,7 @@ function ExerciseCard({ topicId, exercise, index }: { topicId: number; exercise:
   const storageKey = `ex:${topicId}:${exercise.title}`;
 
   return (
-    <div className="bg-surface2 border border-border rounded-xl p-6">
+    <div className="bg-surface2 border border-border rounded-xl p-4 md:p-6">
       <div className="flex items-center gap-3 mb-2.5">
         <span className="bg-accent text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap">
           Ejercicio {index + 1}
