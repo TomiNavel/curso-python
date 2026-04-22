@@ -79,6 +79,7 @@ function Errores({ md }: { md: string }) {
 function Debug({ exercises, topicId }: { exercises: InterviewExercise[]; topicId: number }) {
   const runnable = exercises.filter(ex => ex.content);
   const [active, setActive] = useState(0);
+  const [showSol, setShowSol] = useState(false);
 
   if (runnable.length === 0) {
     if (topicId < DEBUG_START_TOPIC) {
@@ -97,7 +98,7 @@ function Debug({ exercises, topicId }: { exercises: InterviewExercise[]; topicId
         {runnable.map((_, i) => (
           <button
             key={i}
-            onClick={() => setActive(i)}
+            onClick={() => { setActive(i); setShowSol(false); }}
             className={`w-9 h-9 rounded-lg text-[13px] font-mono border transition-colors cursor-pointer
               ${i === currentIdx
                 ? 'bg-accent border-accent text-white'
@@ -115,6 +116,24 @@ function Debug({ exercises, topicId }: { exercises: InterviewExercise[]; topicId
           <h3 className="text-[16px] font-semibold text-text">{currentTitle}</h3>
         </div>
         <RunableBlock initialCode={current.content} lang="python" label="Tu código" storageKey={`debug:${topicId}:${current.filename}`} />
+        {current.solution && (
+          <>
+            <div className="mt-3">
+              <button
+                className="bg-transparent border border-border text-muted px-4 py-1.5 rounded-lg text-[13px] cursor-pointer hover:border-green hover:text-green transition-all"
+                onClick={() => setShowSol(!showSol)}
+              >
+                {showSol ? 'Ocultar solución' : 'Ver solución'}
+              </button>
+            </div>
+            {showSol && (
+              <div className="border-t border-border pt-4 mt-4">
+                <div className="text-[11px] font-semibold text-green uppercase tracking-wide mb-2">Solución</div>
+                <RunableBlock initialCode={current.solution} lang="python" />
+              </div>
+            )}
+          </>
+        )}
       </div>
     </section>
   );

@@ -29,6 +29,10 @@ export default function ContentPanel({ selected, onSelect }: Props) {
   const { status, data, error } = useTopicContent(topic, tab);
 
   useEffect(() => {
+    setTab('teoria');
+  }, [selected.topicId, selected.subtopicId]);
+
+  useEffect(() => {
     scrollRef.current?.scrollTo({ top: 0 });
   }, [selected.topicId, selected.subtopicId, tab]);
 

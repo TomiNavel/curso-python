@@ -31,15 +31,17 @@ export function parseQA(md: string): QA[] {
 export function parseErrors(md: string): QA[] {
   if (!md) return [];
   const body = md.replace(/^#\s.+\n?/, '');
+  const headerRe = /##\s+(?:Error\s+\d+|E\d+)/i;
+  const splitRe = /\n(?=##\s+(?:Error\s+\d+|E\d+))/i;
   const blocks = body
-    .split(/\n(?=##\s+Error\s+\d+)/i)
-    .filter(b => /^##\s+Error\s+\d+/i.test(b.trim()));
+    .split(splitRe)
+    .filter(b => headerRe.test(b.trim()));
 
   return blocks.map(block => {
-    const titleMatch = block.match(/^##\s+Error\s+\d+\s*[:.-]?\s*(.+)/i);
+    const titleMatch = block.match(/^##\s+(?:Error\s+\d+|E\d+)\s*[:.-]?\s*(.+)/i);
     const title = titleMatch ? titleMatch[1].trim() : '';
     const content = block
-      .replace(/^##\s+Error\s+\d+.*\n?/i, '')
+      .replace(/^##\s+(?:Error\s+\d+|E\d+).*\n?/i, '')
       .replace(/\n---\s*$/, '')
       .trim();
     return { q: title, a: content };

@@ -31,6 +31,7 @@ export interface QA {
 export interface InterviewExercise {
   filename: string;
   content: string;
+  solution: string;
 }
 
 export interface Cheatsheet {

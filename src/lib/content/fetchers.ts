@@ -32,10 +32,13 @@ async function loadEntrevistas(topic: Topic): Promise<PanelData> {
   const [preguntasMd, errorsMd, interviewExercises] = await Promise.all([
     res.preguntas ? res.preguntas() : Promise.resolve(''),
     res.errores ? res.errores() : Promise.resolve(''),
-    Promise.all(res.interviewExercises.map(async ex => ({
-      filename: ex.filename,
-      content: await ex.load(),
-    }))),
+    Promise.all(res.interviewExercises.map(async ex => {
+      const [content, solution] = await Promise.all([
+        ex.load(),
+        ex.loadSolution ? ex.loadSolution() : Promise.resolve(''),
+      ]);
+      return { filename: ex.filename, content, solution };
+    })),
   ]);
   return {
     type: 'entrevistas',

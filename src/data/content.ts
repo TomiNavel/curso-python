@@ -23,6 +23,7 @@ const EXERCISES = import.meta.glob('/src/Temario/*/Ejercicios/*.py', { query: '?
 const SOLUTIONS = import.meta.glob('/src/Temario/*/Ejercicios/Soluciones/*.py', { query: '?raw', import: 'default' }) as Record<string, Loader>;
 const INTERVIEW_MD = import.meta.glob('/src/Temario/*/Entrevistas/*.md', { query: '?raw', import: 'default' }) as Record<string, Loader>;
 const INTERVIEW_EX = import.meta.glob('/src/Temario/*/Entrevistas/Ejercicios/*.py', { query: '?raw', import: 'default' }) as Record<string, Loader>;
+const INTERVIEW_SOL = import.meta.glob('/src/Temario/*/Entrevistas/Ejercicios/Soluciones/*.py', { query: '?raw', import: 'default' }) as Record<string, Loader>;
 const CHEATSHEETS = import.meta.glob('/src/Cheatsheets/*.md', { query: '?raw', import: 'default' }) as Record<string, Loader>;
 const RECURSOS = import.meta.glob('/src/Recursos/*.md', { query: '?raw', import: 'default' }) as Record<string, Loader>;
 
@@ -33,7 +34,7 @@ export interface TopicResources {
   exercises: Array<{ filename: string; load: Loader; loadSolution: Loader | null }>;
   preguntas: Loader | null;
   errores: Loader | null;
-  interviewExercises: Array<{ filename: string; load: Loader }>;
+  interviewExercises: Array<{ filename: string; load: Loader; loadSolution: Loader | null }>;
 }
 
 export interface CheatsheetEntry {
@@ -117,7 +118,16 @@ function buildRegistry(): Map<number, TopicResources> {
   for (const [path, load] of Object.entries(INTERVIEW_EX)) {
     const t = ensure(map, path);
     if (!t) continue;
-    t.interviewExercises.push({ filename: filename(path), load });
+    t.interviewExercises.push({ filename: filename(path), load, loadSolution: null });
+  }
+
+  // Pair interview-exercise solutions with their debug exercises by filename.
+  for (const [path, load] of Object.entries(INTERVIEW_SOL)) {
+    const t = ensure(map, path);
+    if (!t) continue;
+    const name = filename(path);
+    const match = t.interviewExercises.find(e => e.filename === name);
+    if (match) match.loadSolution = load;
   }
 
   // Stable filename order for exercises and interview exercises.
