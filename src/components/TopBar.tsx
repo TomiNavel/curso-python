@@ -1,14 +1,30 @@
+import { useEffect, useState } from 'react';
+import { fetchStars } from '../lib/githubStars';
+
 interface Props {
   onMobileMenu: () => void;
 }
 
-const REPO_URL = 'https://github.com/TomiNavel/curso-python';
-const ISSUES_URL = 'https://github.com/TomiNavel/curso-python/issues/new';
+const REPO = 'TomiNavel/curso-python';
+const REPO_URL = `https://github.com/${REPO}`;
+const STAR_URL = `${REPO_URL}/stargazers`;
+const ISSUES_URL = `${REPO_URL}/issues/new`;
 const TWITTER_URL = 'https://x.com/TomiNavel';
 const WEB_URL = 'https://www.tominavel.com';
 const EMAIL = 'hola@tominavel.com';
 
+function formatStars(n: number): string {
+  if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
+  return String(n);
+}
+
 export default function TopBar({ onMobileMenu }: Props) {
+  const [stars, setStars] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetchStars(REPO).then(setStars);
+  }, []);
+
   return (
     <header className="h-11 shrink-0 flex items-center justify-between px-3 md:px-5 bg-bg2 border-b border-border">
       <div className="flex items-center gap-2">
@@ -40,16 +56,39 @@ export default function TopBar({ onMobileMenu }: Props) {
           href={ISSUES_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[12px] text-muted hover:text-accent transition-colors px-2 py-1 rounded-md hover:bg-surface"
+          className="hidden md:inline text-[12px] text-muted hover:text-accent transition-colors px-2 py-1 rounded-md hover:bg-surface"
           title="Reportar un error en GitHub"
         >
           Reportar error
         </a>
+
+        <a
+          href={STAR_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 h-8 px-2.5 rounded-md border border-border text-muted hover:border-accent hover:text-accent transition-all text-[12px] font-medium"
+          title="Dale una estrella en GitHub"
+          aria-label="Star on GitHub"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.05-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.29 0 .32.22.69.82.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+          </svg>
+          <span className="hidden sm:inline">Star</span>
+          <span className="flex items-center gap-0.5 pl-1.5 ml-0.5 border-l border-border">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+            </svg>
+            <span className="tabular-nums min-w-4 text-center">
+              {stars === null ? '—' : formatStars(stars)}
+            </span>
+          </span>
+        </a>
+
         <a
           href={REPO_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-muted hover:text-accent transition-colors w-8 h-8 flex items-center justify-center rounded-md hover:bg-surface"
+          className="hidden md:flex text-muted hover:text-accent transition-colors w-8 h-8 items-center justify-center rounded-md hover:bg-surface"
           title="Repositorio en GitHub"
           aria-label="GitHub"
         >

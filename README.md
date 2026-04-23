@@ -2,6 +2,9 @@
 
 > Curso interactivo de Python como aplicación web. Teoría, ejercicios ejecutables en el navegador y preparación para entrevistas técnicas.
 
+**Si te es útil, dale una estrella ⭐ — me ayuda a priorizar y a que más gente lo encuentre.**
+
+[![GitHub stars](https://img.shields.io/github/stars/TomiNavel/curso-python?style=social)](https://github.com/TomiNavel/curso-python/stargazers)
 ![Node](https://img.shields.io/badge/Node-339933?logo=node.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
