@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Sidebar from './components/Sidebar';
 import ContentPanel from './components/ContentPanel';
+import TopBar from './components/TopBar';
 import TOPICS from './data/topics';
 import type { Selection } from './types/course';
 import { parseHash, toHash } from './lib/hashRoute';
@@ -36,19 +37,15 @@ export default function App() {
         mobileOpen={mobileOpen}
         onMobileClose={() => setMobileOpen(false)}
       />
-      <main className="flex-1 overflow-hidden bg-surface relative">
-        <button
-          onClick={() => setMobileOpen(true)}
-          className="md:hidden fixed top-3 left-3 z-30 bg-bg2 border border-border text-text rounded-md w-9 h-9 flex items-center justify-center cursor-pointer text-[18px] hover:border-accent hover:text-accent transition-all"
-          title="Menú"
-        >
-          ☰
-        </button>
-        {selected
-          ? <ContentPanel key={selected.topicId} selected={selected} onSelect={updateSelected} />
-          : <Welcome onSelect={updateSelected} />
-        }
-      </main>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <TopBar onMobileMenu={() => setMobileOpen(true)} />
+        <main className="flex-1 overflow-hidden bg-surface relative">
+          {selected
+            ? <ContentPanel key={selected.topicId} selected={selected} onSelect={updateSelected} />
+            : <Welcome onSelect={updateSelected} />
+          }
+        </main>
+      </div>
     </div>
   );
 }
