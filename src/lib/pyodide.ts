@@ -61,7 +61,9 @@ export async function runPython(code: string, opts: RunOptions = {}): Promise<Ru
   py.runPython(`import sys, io\n_buf=io.StringIO()\nsys.stdout=_buf\nsys.stderr=_buf`);
   let output = '', error: string | null = null;
   try {
-    py.runPython(code);
+    // runPythonAsync handles both sync code and top-level await (needed for
+    // asyncio exercises since Pyodide already has an active event loop).
+    await py.runPythonAsync(code);
     output = py.runPython('_buf.getvalue()');
   } catch (e) {
     error = (e as Error).message.split('\n').slice(-3).join('\n');
