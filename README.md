@@ -2,7 +2,7 @@
 
 > Curso interactivo de Python como aplicación web. Teoría, ejercicios ejecutables en el navegador y preparación para entrevistas técnicas.
 
-**[▶ Abrir la demo](https://tominavel.github.io/curso-python/)** — sin instalación, corre en el navegador.
+<b><a href="https://tominavel.github.io/curso-python/" target="_blank" rel="noopener noreferrer">▶ Abrir la demo</a></b> — sin instalación, corre en el navegador.
 
 **Si te es útil, dale una estrella ⭐ — me ayuda a priorizar y a que más gente lo encuentre.**
 
